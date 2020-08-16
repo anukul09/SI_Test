@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Shaadi.com</string>
+    <string name="internate">"This Application requires internate. Please check your network connection."</string>
+</resources>
