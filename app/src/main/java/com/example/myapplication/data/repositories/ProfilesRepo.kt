@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.myapplication.MvvmApplication
 import com.example.myapplication.data.network.NetworkCAll
@@ -27,6 +28,7 @@ class ProfilesRepo(val networkCAll: NetworkCAll)  {
         if (isNetworkAvailable(MvvmApplication.context)){
             testData()
         }else{
+            Toast.makeText(MvvmApplication.context,"No Internet Connection",Toast.LENGTH_LONG).show()
             getDataFromRoom()
         }
     }
@@ -50,7 +52,7 @@ class ProfilesRepo(val networkCAll: NetworkCAll)  {
                 withContext(Dispatchers.Main) {
                     testData()
                     check= false
-                    Log.d("Anu1", e.message)
+                    Log.d("Repo", e.message)
                 }
             }
         }
@@ -59,7 +61,6 @@ class ProfilesRepo(val networkCAll: NetworkCAll)  {
     fun saveInDB(ijs: Json4Kotlin_Base?) {
         for (i in 0 until ijs!!.results.size) {
 
-            Log.d("Anu", "called")
             val profileList = ijs.results[i]
             val profile = ProfileEntity(
                 profileList.email,
@@ -90,7 +91,6 @@ class ProfilesRepo(val networkCAll: NetworkCAll)  {
             withContext(Dispatchers.Main){
                 savedProfiles.value = getSavedProfiles
             }
-            Log.d("Anu",savedProfiles.value?.size.toString())
         }
     }
 
