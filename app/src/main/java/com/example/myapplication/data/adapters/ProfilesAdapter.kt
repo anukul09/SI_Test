@@ -7,115 +7,54 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.MvvmApplication
 import com.example.myapplication.R
-import com.example.myapplication.data.roomdb.AppDatabase
-import com.example.myapplication.data.roomdb.ProfileEntity
-import com.example.myapplication.util.Coroutins
-import com.example.myapplication.util.loadImage
+import com.example.myapplication.data.roomdb.Team1
+import com.example.myapplication.data.roomdb.Team2
 
-class ProfilesAdapter(var cProfileList: ArrayList<ProfileEntity>?) : RecyclerView.Adapter<ProfilesAdapter.Viewholder>(){
+class ProfilesAdapter(var cProfileList: ArrayList<Team1>?, var cProfileList1: ArrayList<Team2>?) : RecyclerView.Adapter<ProfilesAdapter.Viewholder>(){
 
     override fun getItemCount(): Int {
-        return cProfileList!!.size
+
+        if(!cProfileList.isNullOrEmpty()){
+            return cProfileList!!.size
+        }else{
+            return cProfileList1!!.size
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.res_single_profile, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.res_team, parent, false)
         return Viewholder(v)
     }
 
     override fun onBindViewHolder(holder: Viewholder, position: Int) {
 
-            holder.profileName.text = cProfileList!![position].profileName
-            holder.profileAge.text = cProfileList!![position].profileAge.toString()
-            holder.profileGender.text = cProfileList!![position].profileGender
-            holder.profileLocationCity.text = cProfileList!![position].profileLocationCity
-            holder.profileLocationState.text = cProfileList!![position].profileLocationState
-            holder.profileImage.loadImage(cProfileList!![position].profileImageUrl)
+        if(!cProfileList.isNullOrEmpty()){
 
-            if(!cProfileList!![position].isDeclined && !cProfileList!![position].isAccepted){
-                holder.llCheck.visibility = View.VISIBLE
-                holder.tvProfileSelection.visibility = View.GONE
+            val playerName = StringBuilder(cProfileList!![position].PlaynerName)
+            if (cProfileList!![position].isCaption){
+                playerName.append(" [C] ")
+            }
+            if (cProfileList!![position].isKeepner){
+                playerName.append(" [WK] ")
+            }
+            holder.tvPlayName.text = playerName
+        }else{
+            val playerName = StringBuilder(cProfileList1!![position].PlaynerName)
+            if (cProfileList1!![position].isCaption){
+                playerName.append(" [C] ")
+            }
+            if (cProfileList1!![position].isKeepner){
+                playerName.append(" [WK] ")
             }
 
-            if (cProfileList!![position].isDeclined){
-                holder.llCheck.visibility = View.GONE
-                holder.tvProfileSelection.visibility = View.VISIBLE
-                holder.tvProfileSelection.text = "Member Declined"
-            }
-
-            if (cProfileList!![position].isAccepted){
-                holder.llCheck.visibility = View.GONE
-                holder.tvProfileSelection.visibility = View.VISIBLE
-                holder.tvProfileSelection.text = "Member Accepted"
-            }
-
-
-        holder.profileSelected.setOnClickListener {
-
-            val profile = ProfileEntity(
-                cProfileList!!.get(position).id,
-                cProfileList!!.get(position).profileName,
-                cProfileList!![position].profileAge,
-                cProfileList!![position].profileGender,
-                cProfileList!![position].profileLocationCity,
-                cProfileList!![position].profileLocationState,
-                cProfileList!!.get(position).profileImageUrl,
-                false,
-                true
-            )
-
-            Coroutins.io {
-                AppDatabase(MvvmApplication.context).getProfileDao().updateProfile(profile)
-            }
-
-            cProfileList!!.set(position,profile)
-            notifyDataSetChanged()
-
+            holder.tvPlayName.text = playerName
         }
-
-        holder.profileDeclined.setOnClickListener {
-
-            val profile = ProfileEntity(
-                cProfileList!!.get(position).id,
-                cProfileList!!.get(position).profileName,
-                cProfileList!![position].profileAge,
-                cProfileList!![position].profileGender,
-                cProfileList!![position].profileLocationCity,
-                cProfileList!![position].profileLocationState,
-                cProfileList!!.get(position).profileImageUrl,
-                true,
-                false
-            )
-
-            Coroutins.io {
-                AppDatabase(MvvmApplication.context).getProfileDao().updateProfile(profile)
-            }
-
-            cProfileList!!.set(position,profile)
-            notifyDataSetChanged()
-        }
-
     }
 
     class Viewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val profileImage = itemView.findViewById<ImageView>(R.id.ivDisplayImg)
-        val profileName = itemView.findViewById<TextView>(R.id.tvName)
-        val profileGender = itemView.findViewById<TextView>(R.id.tvHeight)
-        val profileAge = itemView.findViewById<TextView>(R.id.tvAge)
-        val profileLocationCity = itemView.findViewById<TextView>(R.id.tvCast)
-        val profileLocationState = itemView.findViewById<TextView>(R.id.tvLanguage)
 
-        val profileSelected = itemView.findViewById<ImageView>(R.id.ivselected)
-        val profileDeclined = itemView.findViewById<ImageView>(R.id.ivdeclined)
-        val llCheck = itemView.findViewById<LinearLayout>(R.id.llCheck)
-
-        val tvProfileSelection = itemView.findViewById<TextView>(R.id.tvProfileSelection)
-
+        val tvPlayName = itemView.findViewById<TextView>(R.id.tvPlayerName)
     }
 
-    interface SelectProfile{
-        fun onprofileselected(position: Int)
-    }
 }

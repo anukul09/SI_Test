@@ -3,7 +3,7 @@ package com.example.myapplication
 import android.app.Application
 import android.content.Context
 import com.example.myapplication.data.network.NetworkCAll
-import com.example.myapplication.data.repositories.ProfilesRepo
+import com.example.myapplication.data.repositories.CricketTeamRepo
 import com.example.myapplication.data.roomdb.AppDatabase
 //import com.example.myapplication.data.roomdb.AppDatabase
 import com.example.myapplication.ui.MyViewModelFactory
@@ -21,7 +21,7 @@ class MvvmApplication : Application() , KodeinAware{
         import(androidXModule(this@MvvmApplication))
 
         bind() from singleton { NetworkCAll() }
-        bind() from singleton { ProfilesRepo(instance())}
+        bind() from singleton { CricketTeamRepo(instance())}
         bind() from singleton { AppDatabase(instance()) }
         bind() from provider { MyViewModelFactory(instance()) }
 

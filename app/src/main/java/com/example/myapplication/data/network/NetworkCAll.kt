@@ -1,21 +1,20 @@
 package com.example.myapplication.data.network
 
-import com.example.myapplication.data.network.profileMappingResponses.Json4Kotlin_Base
-
-import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface NetworkCAll {
 
-    @GET("?results=10")
-    suspend fun getAllProfilesData() : Response<Json4Kotlin_Base>
+    @GET("nzin01312019187360.json")
+     fun getAllProfilesData() : Call<ResponseBody>
 
     companion object{
         operator fun invoke() : NetworkCAll {
             return Retrofit.Builder()
-                .baseUrl("https://randomuser.me/api/")
+                .baseUrl("https://cricket.yahoo.net/sifeeds/cricket/live/json/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(NetworkCAll::class.java)

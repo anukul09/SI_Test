@@ -8,7 +8,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 
 fun ImageView.loadImage(uri: String?) {
-		val options = RequestOptions().placeholder(com.example.myapplication.R.drawable.shadi)
+		val options = RequestOptions()
 		Glide.with(this.context)
 			.setDefaultRequestOptions(options)
 			.load(uri)
